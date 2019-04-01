@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- A biblioteca bundle já contem os arquivos JS do Bootstrap, Popper, e jQuery.
+    <script src="js/bootstrap.bundle.js"></script>-->
+    <title>FTT EC LP3 N2</title>
+    <LINK REL="stylesheet" HREF="css/bootstrap.css" />
+    <LINK REL="stylesheet" HREF="css/nav-lateral.css" />
+    <link href="css/typography.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+        <STYLE>
+            .center-txt {
+            text-align: center;
+            color: black;
+            width: 90px;
+            padding: 4px;
+            margin:0;
+            border:0;
+        }
+        .button-selected {
+            background-color: #343a40;
+            color: white;
+            border-radius: 15px;
+        }       
+        .width-button-bar {
+            text-align: center;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin-right: 0;
+            margin-left: 0;
+            
+        }
+        .bottom-button-bar {
+            margin:0;
+            padding:0;
+            border:0;
+            width: 100%;
+        }
+        .icon-font {
+            font-size: 40px;   
+        }
+
+        article {
+            margin-top: 20px;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.9);
+        }
+        main {
+            padding-top: 80px;
+            padding-bottom: 120px;
+        }
+        form {
+            padding: 0;
+            border: 0;
+            margin: 0;
+        }
+    </STYLE>
+    <SCRIPT>
+        var values = new Array(); 
+        var lab = new Array();
+        //Busca os dados da API (Serviço REST/JSON - AJAX)
+        function reloadPage() {
+            var DataInicial = document.getElementById('Inicial').value;
+            var DataFinal = document.getElementById('Final').value;
+            console.log(DataInicial,DataFinal);
+            
+            if(DataInicial == ''|| DataFinal == '') {
+                url = 'https://api.coindesk.com/v1/bpi/historical/close.json?start=2019-01-01&end=2019-03-28';
+            }
+            else {
+                url = 'https://api.coindesk.com/v1/bpi/historical/close.json?start='+DataInicial+'&end='+DataFinal;
+            }    
+            
+            console.log(url);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.onload = function() {
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var newsData = JSON.parse(xhr.responseText);
+                    console.log(newsData);
+                    var c = JSON.parse(xhr.responseText).bpi
+                    var arrayFields = Object.keys(c);
+                    var n = 0;
+                    arrayFields.forEach((item) => {
+	                   values[n] = c[item];
+                       lab[n] = n;
+                       n++;
+                    });
+                } else {
+                    
+                    let error_message= "Ops! Erro!!!<br>" + xhr.statusText;
+                    console.log(error_message);
+                } //if
+                GenerateChart();
+                console.log('Here we are...');
+            };
+
+            xhr.open('GET', url);
+            xhr.send();
+            
+        } //reloadPage
+      
+        function GenerateChart() {
+            var data = {
+            // A labels array that can contain any sort of values
+            series: [values],
+            // Our series array that contains series objects or in this case series data arrays
+            labels: []};
+
+            // Create a new line chart object where as first parameter we pass in a selector
+            // that is resolving to our chart container element. The Second parameter
+            // is the actual data object.
+            new Chartist.Line('.ct-chart', data);      
+        }
+    </SCRIPT>
+</HEAD>
+
+<BODY onload="reloadPage()" lang="pt-br">
+    <nav class="navbar navbar-expand navbar-dark bg-primary inner" style="direction: rtl;text-align:right;"> <a href="#menu-toggle" id="menu-toggle" class="navbar-brand"><span class="navbar-toggler-icon"></span></a> <button id = "btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button></nav>
+        <div id="wrapper" class="untoggled">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand"> <a href="#">Menu</a> </li>
+                    <li><a href="index.html">
+                            Notícias &#128240;</a> </li>
+                    <li> <a href="tab02map.html">Infográfico 	
+                            &#128480;</a> </li>
+                    <li> <a href="tab03todo.html">Valores
+                            &#128181;</a> </li>
+                    <li> <a href="about.html">Sobre</a> </li>
+                </ul>
+            </div> <!-- /#sidebar-wrapper -->
+            <div id="header-wrap" class="wrap">
+	<div id="header" class="pagesize">
+        <h1 id="logo"><a href="?">Business Central</a></h1>
+        <div id="topnav">
+            <a href="https://coinlayer.com/" title="Coin Layer"><img src="images/icon1.gif" alt="" /></a>
+            <a href="https://coinmarketcap.com/" title="Coin Market Cap"><img src="images/icon2.gif" alt="" /></a>
+            <a href="https://www.binance.com/pt" title="Binance"><img src="img/icon3.gif" alt="" /></a>
+        </div>
+    </div>
+</div>
+<div id="mainnav-wrap" class="wrap">
+    <div id="mainnav" class="pagesize clearfix">
+    	<div class="vernav">
+            <ul class="clearfix">
+                <li><a href="?" id="active"><span>Home</span></a></li>
+                <li><a href="https://coinlayer.com/"><span>Reference</span></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+            <h1 style="text-align: center; color:#000;">Infográfico de Bitcoins</h1>
+            <br>
+            <form style="position:relative; left:28%">
+                 Data Inicial (YYYY-MM-DD)  <input type="text" id='Inicial'>
+                 Data Final (YYYY-MM-DD)  <input type="text" id='Final'>
+                <button type="button" onclick="reloadPage()">Consultar</button>
+            </form>        
+            <div class="ct-chart ct-double-octave">
+            </div>
+    </div>  
+</BODY>
+<!-- carga de scripts do Bootstrap, JQuery, Popper -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous">
+           script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script src="js/bootstrap.bundle.min.js"></script> <!-- Menu Toggle Script -->
+        <script>            
+          $(function(){
+            $("#menu-toggle").click(function(e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
+
+            $(window).resize(function(e) {
+              if($(window).width()<=768){
+                $("#wrapper").removeClass("toggled");
+              }else{
+                $("#wrapper").addClass("toggled");
+              }
+            });
+          });
+  </script> 
+  <script>
+            
+            var prevScrollpos = window.pageYOffset;
+            
+            window.onscroll = function() {
+                
+            var currentScrollPos = window.pageYOffset;
+                if (prevScrollpos > currentScrollPos) {
+                    //document.getElementById("wrapper").classList.remove("untoggled");
+                    //document.getElementById("wrapper").classList.add("toggled");
+                } else {
+                    document.getElementById("wrapper").classList.remove("toggled");
+                    document.getElementById("wrapper").classList.add("untoggled");
+                }
+                    prevScrollpos = currentScrollPos;
+                }
+            
+        </script>
+</HTML>
